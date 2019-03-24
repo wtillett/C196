@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">C196 Project</string>
+    <string name="term_button_text">View Terms</string>
+    <string name="course_button_text">View Courses</string>
+    <string name="assessment_button_text">View Assessments</string>
+    <string name="main_activity_text">Select an option below</string>
+    <string name="term_list_title">Terms</string>
+    <string name="course_list_title">All Courses</string>
+    <string name="assessment_list_title">All Assessments</string>
+    <string name="title_activity_term">TermActivity</string>
+    <string name="title_activity_course">CourseActivity</string>
+    <string name="title_activity_assessment">AssessmentActivity</string>
+    <string name="edit_term">Edit Term</string>
+    <string name="add_term">Add Term</string>
+    <string name="edit_course">Edit Course</string>
+    <string name="add_course">Add Course</string>
+    <string name="edit_assessment">Edit Assessment</string>
+    <string name="add_assessment">Add Assessment</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>
