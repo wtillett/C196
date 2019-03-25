@@ -54,4 +54,9 @@ public class Assessment implements Serializable {
         this.goalDate = "";
         this.isObjective = true;
     }
+
+    @Override
+    public String toString() {
+        return this.title + " " + (this.isObjective ? "OA" : "PA");
+    }
 }

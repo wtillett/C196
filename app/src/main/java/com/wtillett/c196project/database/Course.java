@@ -65,4 +65,9 @@ public class Course implements Serializable {
         this.status = status;
         this.notes = notes;
     }
+
+    @Override
+    public String toString() {
+        return this.title + " " + this.status;
+    }
 }

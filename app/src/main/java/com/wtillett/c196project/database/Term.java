@@ -33,4 +33,9 @@ public class Term implements Serializable {
     public Term() {
         this.id = idSource++;
     }
+
+    @Override
+    public String toString() {
+        return this.title + " " + this.startDate + " through " + this.endDate;
+    }
 }
