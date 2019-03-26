@@ -16,7 +16,6 @@ import com.wtillett.c196project.database.Term;
 
 import java.util.List;
 
-import static com.wtillett.c196project.TermActivity.TERM_ID;
 
 public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -103,7 +102,7 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Term term = (Term) items.get(position);
             Context context = v.getContext();
             Intent intent = new Intent(context, TermDetailActivity.class);
-            intent.putExtra(TERM_ID, term.id);
+            intent.putExtra(TermDetailActivity.TERM_ID, term.id);
             context.startActivity(intent);
         }
     }

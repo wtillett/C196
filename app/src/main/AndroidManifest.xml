@@ -12,6 +12,24 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".AssessmentDetailActivity"
+            android:label="Assessment Detail"
+            android:parentActivityName=".AssessmentActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wtillett.c196project.AssessmentActivity" />
+        </activity>
+        <activity
+            android:name=".CourseDetailActivity"
+            android:label="Course Detail"
+            android:parentActivityName=".CourseActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wtillett.c196project.CourseActivity" />
+        </activity>
+        <activity
             android:name=".TermDetailActivity"
             android:label="Term Detail"
             android:parentActivityName=".TermActivity">

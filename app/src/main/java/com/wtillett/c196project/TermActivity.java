@@ -17,8 +17,6 @@ import java.util.List;
 
 public class TermActivity extends AppCompatActivity {
 
-    public static final String TERM_ID = "term_id";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
