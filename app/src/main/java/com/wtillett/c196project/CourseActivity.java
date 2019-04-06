@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
 
-    public static final String COURSE_ID = "course_id";
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class CourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -39,12 +39,22 @@ public class CourseActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-        List<Course> courses = db.appDao().getAllCourses();
+        setRecyclerView();
+    }
+
+    // Ensures recyclerview refreshes when activity is resumed
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
+        List <Course> courses = db.appDao().getAllCourses();
         GenericAdapter adapter = new GenericAdapter(this, courses);
         adapter.setDb(db);
+        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 }

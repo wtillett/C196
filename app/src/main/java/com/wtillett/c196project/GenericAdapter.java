@@ -19,7 +19,6 @@ import java.util.List;
 
 public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private AppDatabase db;
     private LayoutInflater inflater;
     private List<?> items;
     private final int TERM = 0, COURSE = 1, ASSESSMENT = 2;
@@ -84,7 +83,7 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     void setDb(AppDatabase db) {
-        this.db = db;
+        AppDatabase db1 = db;
     }
 
     class TermViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -107,25 +106,43 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private class CourseViewHolder extends RecyclerView.ViewHolder {
+    private class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView textView;
 
         CourseViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.course);
+            itemView.setOnClickListener(this);
         }
 
-        // TODO: Add OnClickListener to CourseViewHolder
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Course course = (Course) items.get(position);
+            Context context = v.getContext();
+            Intent intent = new Intent(context, CourseDetailActivity.class);
+            intent.putExtra(CourseDetailActivity.COURSE_ID, course.id);
+            context.startActivity(intent);
+        }
     }
 
-    private class AssessmentViewHolder extends RecyclerView.ViewHolder {
+    private class AssessmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView textView;
 
         AssessmentViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.assessment);
+            itemView.setOnClickListener(this);
         }
 
-        // TODO: Add OnClickListener to AssessmentViewHolder
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Assessment assessment = (Assessment) items.get(position);
+            Context context = v.getContext();
+            Intent intent = new Intent(context, AssessmentDetailActivity.class);
+            intent.putExtra(AssessmentDetailActivity.ASSESSMENT_ID, assessment.id);
+            context.startActivity(intent);
+        }
     }
 }

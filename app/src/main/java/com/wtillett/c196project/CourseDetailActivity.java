@@ -1,13 +1,16 @@
 package com.wtillett.c196project;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Assessment;
@@ -17,6 +20,9 @@ import java.util.List;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
+    private AppDatabase db;
+    private Course course;
+    private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
 
     @Override
@@ -25,38 +31,89 @@ public class CourseDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_detail);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         TextView courseDetailHeader = findViewById(R.id.courseDetailHeader);
-        EditText courseTitle = findViewById(R.id.courseTitle);
-        EditText courseStartDate = findViewById(R.id.courseStartDate);
-        EditText courseEndDate = findViewById(R.id.courseEndDate);
-        EditText courseStatus = findViewById(R.id.courseStatus);
-        EditText courseNotes = findViewById(R.id.courseNotes);
+        courseTitle = findViewById(R.id.courseTitle);
+        courseStartDate = findViewById(R.id.courseStartDate);
+        courseEndDate = findViewById(R.id.courseEndDate);
+        courseStatus = findViewById(R.id.courseStatus);
+        courseNotes = findViewById(R.id.courseNotes);
 
         Intent intent = getIntent();
-        // If a new course is being added, id will be set to -1
-        int id = intent.getIntExtra(COURSE_ID, -1);
+        // If a new course is being added, courseId will be set to -1
+        int courseId = intent.getIntExtra(COURSE_ID, -1);
+        int termId = intent.getIntExtra(TermDetailActivity.TERM_ID, -1);
 
-        Course course;
-        if (id != 1) {
-            course = db.appDao().getCourse(id);
+        if (courseId != -1) {
+            course = db.appDao().getCourse(courseId);
             courseDetailHeader.setText(R.string.edit_course);
             courseTitle.setText(course.title);
             courseStartDate.setText(course.startDate);
             courseEndDate.setText(course.endDate);
             courseStatus.setText(course.status);
             courseNotes.setText(course.notes);
-        } else {
+        } else if (termId != -1) {
             course = new Course();
+            course.termId = termId;
             courseDetailHeader.setText(R.string.add_course);
         }
 
+        setRecyclerView();
+    }
+
+    // Ensures recyclerview refreshes when activity is resumed
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
         List<Assessment> assessments = db.appDao().getAssessments(course.id);
         GenericAdapter adapter = new GenericAdapter(this, assessments);
         adapter.setDb(db);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void addAssessment(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, AssessmentDetailActivity.class);
+        intent.putExtra(COURSE_ID, course.id);
+        context.startActivity(intent);
+    }
+
+    public void saveCourse(View view) {
+        course.title = courseTitle.getText().toString();
+        course.startDate = courseStartDate.getText().toString();
+        course.endDate = courseEndDate.getText().toString();
+        course.status = courseStatus.getText().toString();
+        course.notes = courseNotes.getText().toString();
+
+        if (db.appDao().getCourse(course.id) == null)
+            db.appDao().insertCourse(course);
+        else db.appDao().updateCourses(course);
+
+        finish();
+    }
+
+    public void deleteCourse(View view) {
+        // Check to see if course has assessments assigned to it
+        if (db.appDao().getAssessments(course.id).size() != 0)
+            // If it does, don't allow delete and show toast
+            Toast.makeText(this,
+                    "Cannot delete a course with assessments assigned to it.",
+                    Toast.LENGTH_LONG).show();
+        else
+            // If not, delete the course and return to the appropriate activity
+            db.appDao().deleteCourse(course);
+
+        finish();
+    }
+
+    public void cancelEdit(View view) {
+        finish();
     }
 }

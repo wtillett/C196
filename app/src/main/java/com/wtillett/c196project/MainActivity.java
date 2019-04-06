@@ -12,6 +12,7 @@ import com.wtillett.c196project.database.Term;
 public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
+    public static final int TERM = 1, COURSE = 2, ASSESSMENT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

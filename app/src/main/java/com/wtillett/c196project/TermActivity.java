@@ -17,13 +17,15 @@ import java.util.List;
 
 public class TermActivity extends AppCompatActivity {
 
+    private AppDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +38,16 @@ public class TermActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setRecyclerView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.termRecyclerview);
         List<Term> terms = db.appDao().getAllTerms();
         GenericAdapter adapter = new GenericAdapter(this, terms);

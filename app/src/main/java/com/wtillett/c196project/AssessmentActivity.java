@@ -18,13 +18,15 @@ import java.util.List;
 
 public class AssessmentActivity extends AppCompatActivity {
 
+    private AppDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +39,17 @@ public class AssessmentActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setRecyclerView();
+    }
+
+    // Ensures recyclerview refreshes when activity is resumed
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
         List<Assessment> assessments = db.appDao().getAllAssessments();
         GenericAdapter adapter = new GenericAdapter(this, assessments);

@@ -39,11 +39,11 @@ public class TermDetailActivity extends AppCompatActivity {
         termEndDate = findViewById(R.id.termEndDate);
 
         Intent intent = getIntent();
-        // If a new term is being added, id will be set to -1
-        int id = intent.getIntExtra(TERM_ID, -1);
+        // If a new term is being added, termId will be set to -1
+        int termId = intent.getIntExtra(TERM_ID, -1);
 
-        if (id != -1) {
-            term = db.appDao().getTerm(id);
+        if (termId != -1) {
+            term = db.appDao().getTerm(termId);
             termDetailHeader.setText(R.string.edit_term);
             termTitle.setText(term.title);
             termStartDate.setText(term.startDate);
@@ -53,8 +53,19 @@ public class TermDetailActivity extends AppCompatActivity {
             termDetailHeader.setText(R.string.add_term);
         }
 
+        setRecyclerView();
+    }
+
+    // Ensures recyclerview refreshes when activity is resumed
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-        List<Course> courses = db.appDao().getCourses(term.id);
+        List <Course> courses = db.appDao().getCourses(term.id);
         GenericAdapter adapter = new GenericAdapter(this, courses);
         adapter.setDb(db);
         recyclerView.setAdapter(adapter);
@@ -62,7 +73,10 @@ public class TermDetailActivity extends AppCompatActivity {
     }
 
     public void addCourse(View view) {
-
+        Context context = view.getContext();
+        Intent intent = new Intent(context, CourseDetailActivity.class);
+        intent.putExtra(TERM_ID, term.id);
+        context.startActivity(intent);
     }
 
     public void saveTerm(View view) {
@@ -76,7 +90,7 @@ public class TermDetailActivity extends AppCompatActivity {
             db.appDao().updateTerms(term);
         }
 
-        launchTermActivity(view);
+        finish();
     }
     public void deleteTerm(View view) {
         // Check to see if term has courses assigned to it
@@ -88,17 +102,11 @@ public class TermDetailActivity extends AppCompatActivity {
         // If not, delete the term and return to the term list
         } else {
             db.appDao().deleteTerm(term);
-            launchTermActivity(view);
+            finish();
         }
     }
 
     public void cancelEdit(View view) {
-        launchTermActivity(view);
-    }
-
-    private void launchTermActivity(View view) {
-        Context context = view.getContext();
-        Intent intent = new Intent(context, TermActivity.class);
-        context.startActivity(intent);
+        finish();
     }
 }
