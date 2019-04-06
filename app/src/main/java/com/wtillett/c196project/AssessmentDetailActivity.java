@@ -21,6 +21,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private Switch isObjectiveSwitch;
     public static final String ASSESSMENT_ID = "assessment_id";
 
+    // TODO: Implement alerts for goal dates
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

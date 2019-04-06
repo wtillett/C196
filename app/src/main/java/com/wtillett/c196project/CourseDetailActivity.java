@@ -26,6 +26,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
 
+    // TODO: Implement alerts for start and end dates
+    // TODO: Implement note sharing via e-mail or SMS
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,6 +14,12 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     public static final int TERM = 1, COURSE = 2, ASSESSMENT = 3;
 
+    // TODO: Convert ALL dates to a real date format
+    // TODO: Convert Lists to ArrayLists
+    // TODO: Add application title and icon
+    // TODO: Add an ActionBar
+    // TODO: Programmatically add to the UI
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

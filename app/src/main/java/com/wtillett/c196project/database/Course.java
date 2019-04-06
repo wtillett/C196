@@ -17,6 +17,8 @@ import java.io.Serializable;
         indices = {@Index("termId")})
 public class Course implements Serializable {
 
+    // TODO: Course status should only be "in progress", "completed", "dropped", or "plan to take"
+
     private static Integer idSource = 0;
 
     @PrimaryKey
