@@ -43,4 +43,10 @@ public class Mentor {
         this.id = idSource++;
         this.courseId = null;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name + " " + this.email + " " + this.phone;
+    }
 }

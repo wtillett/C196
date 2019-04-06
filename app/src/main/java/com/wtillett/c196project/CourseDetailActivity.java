@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Assessment;
 import com.wtillett.c196project.database.Course;
+import com.wtillett.c196project.database.Mentor;
 
 import java.util.List;
 
@@ -59,28 +60,42 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseDetailHeader.setText(R.string.add_course);
         }
 
-        setRecyclerView();
+        setRecyclerViews();
     }
 
     // Ensures recyclerview refreshes when activity is resumed
     @Override
     protected void onResume() {
         super.onResume();
-        setRecyclerView();
+        setRecyclerViews();
     }
 
-    private void setRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
+    private void setRecyclerViews() {
+        RecyclerView assessmentRecyclerView = findViewById(R.id.assessmentRecyclerView);
         List<Assessment> assessments = db.appDao().getAssessments(course.id);
-        GenericAdapter adapter = new GenericAdapter(this, assessments);
-        adapter.setDb(db);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        GenericAdapter assessmentAdapter = new GenericAdapter(this, assessments);
+        assessmentAdapter.setDb(db);
+        assessmentRecyclerView.setAdapter(assessmentAdapter);
+        assessmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        RecyclerView mentorRecyclerView = findViewById(R.id.mentorRecyclerView);
+        List<Mentor> mentors = db.appDao().getMentors(course.id);
+        GenericAdapter mentorAdapter = new GenericAdapter(this, mentors);
+        mentorAdapter.setDb(db);
+        mentorRecyclerView.setAdapter(mentorAdapter);
+        mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void addAssessment(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, AssessmentDetailActivity.class);
+        intent.putExtra(COURSE_ID, course.id);
+        context.startActivity(intent);
+    }
+
+    public void addMentor(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, MentorDetailActivity.class);
         intent.putExtra(COURSE_ID, course.id);
         context.startActivity(intent);
     }

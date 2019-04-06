@@ -16,6 +16,11 @@
     <string name="add_course">Add Course</string>
     <string name="edit_assessment">Edit Assessment</string>
     <string name="add_assessment">Add Assessment</string>
+    <string name="edit_mentor">Edit Mentor</string>
+    <string name="add_mentor">Add Mentor</string>
+    <string name="name">Name:</string>
+    <string name="email">Email Address:</string>
+    <string name="phone">Phone Number:</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -28,4 +33,5 @@
     <string name="notes">Notes:</string>
     <string name="finish_by">Finish By:</string>
     <string name="objective">Objective</string>
+    <string name="mentors">Mentors:</string>
 </resources>

@@ -57,6 +57,6 @@ public class Assessment implements Serializable {
 
     @Override
     public String toString() {
-        return this.title + "\n" + (this.isObjective ? "Objective" : "Performance");
+        return this.title + "    " + (this.isObjective ? "Objective" : "Performance");
     }
 }

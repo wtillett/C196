@@ -85,9 +85,13 @@ public interface AppDao {
     @Query("DELETE FROM mentor_table")
     void deleteAllMentors();
 
+    @Query("SELECT * FROM mentor_table WHERE id = :id")
+    Mentor getMentor(Integer id);
+
     @Query("SELECT * FROM mentor_table WHERE courseId = :courseId")
     List<Mentor> getMentors(Integer courseId);
 
     @Update
     void updateMentors(Mentor... mentors);
+
 }

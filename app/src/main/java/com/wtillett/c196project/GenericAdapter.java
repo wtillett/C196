@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Assessment;
 import com.wtillett.c196project.database.Course;
+import com.wtillett.c196project.database.Mentor;
 import com.wtillett.c196project.database.Term;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private LayoutInflater inflater;
     private List<?> items;
-    private final int TERM = 0, COURSE = 1, ASSESSMENT = 2;
+    private final int TERM = 0, COURSE = 1, ASSESSMENT = 2, MENTOR = 3;
 
     GenericAdapter(Context context, List<?> items) {
         this.items = items;
@@ -48,6 +49,9 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case ASSESSMENT:
                 itemView = inflater.inflate(R.layout.assessmentlist_item, parent, false);
                 return new AssessmentViewHolder(itemView);
+            case MENTOR:
+                itemView = inflater.inflate(R.layout.mentorlist_item, parent, false);
+                return new MentorViewHolder(itemView);
         }
         return null;
     }
@@ -68,6 +72,10 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 AssessmentViewHolder assessmentViewHolder = (AssessmentViewHolder) viewHolder;
                 assessmentViewHolder.textView.setText(current.toString());
                 break;
+            case MENTOR:
+                MentorViewHolder mentorViewHolder = (MentorViewHolder) viewHolder;
+                mentorViewHolder.textView.setText(current.toString());
+                break;
         }
     }
 
@@ -79,6 +87,8 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return COURSE;
         else if (items.get(position) instanceof Assessment)
             return ASSESSMENT;
+        else if (items.get(position) instanceof Mentor)
+            return MENTOR;
         return -1;
     }
 
@@ -142,6 +152,26 @@ public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Context context = v.getContext();
             Intent intent = new Intent(context, AssessmentDetailActivity.class);
             intent.putExtra(AssessmentDetailActivity.ASSESSMENT_ID, assessment.id);
+            context.startActivity(intent);
+        }
+    }
+
+    private class MentorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView textView;
+
+        MentorViewHolder(View itemView) {
+            super(itemView);
+            textView = itemView.findViewById(R.id.mentor);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Mentor mentor = (Mentor) items.get(position);
+            Context context = v.getContext();
+            Intent intent = new Intent(context, MentorDetailActivity.class);
+            intent.putExtra(MentorDetailActivity.MENTOR_ID, mentor.id);
             context.startActivity(intent);
         }
     }
