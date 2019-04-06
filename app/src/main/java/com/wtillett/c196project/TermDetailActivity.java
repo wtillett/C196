@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
@@ -77,12 +78,22 @@ public class TermDetailActivity extends AppCompatActivity {
 
         launchTermActivity(view);
     }
-
     public void deleteTerm(View view) {
+        // Check to see if term has courses assigned to it
+        // If it does, don't allow delete and show toast
+        if (db.appDao().getCourses(term.id).size() != 0) {
+            Toast.makeText(this,
+                    "Cannot delete a term with courses assigned to it.",
+                    Toast.LENGTH_LONG).show();
+        // If not, delete the term and return to the term list
+        } else {
+            db.appDao().deleteTerm(term);
+            launchTermActivity(view);
+        }
     }
 
     public void cancelEdit(View view) {
-        finish();
+        launchTermActivity(view);
     }
 
     private void launchTermActivity(View view) {

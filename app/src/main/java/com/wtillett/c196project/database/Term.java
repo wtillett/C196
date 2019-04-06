@@ -36,6 +36,6 @@ public class Term implements Serializable {
 
     @Override
     public String toString() {
-        return this.title + " " + this.startDate + " through " + this.endDate;
+        return this.title + "\n" + this.startDate + " - " + this.endDate;
     }
 }

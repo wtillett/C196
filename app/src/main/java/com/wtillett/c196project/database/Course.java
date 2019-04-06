@@ -68,6 +68,6 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-        return this.title + " " + this.status;
+        return this.title + "\n" + this.status;
     }
 }
