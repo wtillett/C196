@@ -16,6 +16,7 @@ import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Term;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TermDetailActivity extends AppCompatActivity {
@@ -65,7 +66,7 @@ public class TermDetailActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-        List <Course> courses = db.appDao().getCourses(term.id);
+        ArrayList<Course> courses = new ArrayList<>(db.appDao().getCourses(term.id));
         GenericAdapter adapter = new GenericAdapter(this, courses);
         adapter.setDb(db);
         recyclerView.setAdapter(adapter);

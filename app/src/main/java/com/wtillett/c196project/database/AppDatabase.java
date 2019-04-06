@@ -19,7 +19,6 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context, AppDatabase.class, "tracker_db")
                     .allowMainThreadQueries()
-                    .allowMainThreadQueries()
                     .build();
         }
         return INSTANCE;

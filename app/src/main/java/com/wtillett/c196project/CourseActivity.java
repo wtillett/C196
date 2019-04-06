@@ -14,6 +14,7 @@ import android.view.View;
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        List <Course> courses = db.appDao().getAllCourses();
+        ArrayList<Course> courses = new ArrayList<>(db.appDao().getAllCourses());
         GenericAdapter adapter = new GenericAdapter(this, courses);
         adapter.setDb(db);
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);

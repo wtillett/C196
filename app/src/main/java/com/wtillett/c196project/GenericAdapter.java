@@ -15,16 +15,16 @@ import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Mentor;
 import com.wtillett.c196project.database.Term;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class GenericAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<?> items;
+    private ArrayList<?> items;
     private final int TERM = 0, COURSE = 1, ASSESSMENT = 2, MENTOR = 3;
 
-    GenericAdapter(Context context, List<?> items) {
+    GenericAdapter(Context context, ArrayList<?> items) {
         this.items = items;
         this.inflater = LayoutInflater.from(context);
     }

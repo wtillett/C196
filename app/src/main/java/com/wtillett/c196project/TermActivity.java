@@ -13,6 +13,8 @@ import android.view.View;
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Term;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TermActivity extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class TermActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.termRecyclerview);
-        List<Term> terms = db.appDao().getAllTerms();
+        ArrayList<Term> terms = new ArrayList<>(db.appDao().getAllTerms());
         GenericAdapter adapter = new GenericAdapter(this, terms);
         adapter.setDb(db);
         recyclerView.setAdapter(adapter);

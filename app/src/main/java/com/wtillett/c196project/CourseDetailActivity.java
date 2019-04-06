@@ -17,6 +17,7 @@ import com.wtillett.c196project.database.Assessment;
 import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Mentor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDetailActivity extends AppCompatActivity {
@@ -75,14 +76,14 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     private void setRecyclerViews() {
         RecyclerView assessmentRecyclerView = findViewById(R.id.assessmentRecyclerView);
-        List<Assessment> assessments = db.appDao().getAssessments(course.id);
+        ArrayList<Assessment> assessments = new ArrayList<>(db.appDao().getAssessments(course.id));
         GenericAdapter assessmentAdapter = new GenericAdapter(this, assessments);
         assessmentAdapter.setDb(db);
         assessmentRecyclerView.setAdapter(assessmentAdapter);
         assessmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         RecyclerView mentorRecyclerView = findViewById(R.id.mentorRecyclerView);
-        List<Mentor> mentors = db.appDao().getMentors(course.id);
+        ArrayList<Mentor> mentors = new ArrayList<>(db.appDao().getMentors(course.id));
         GenericAdapter mentorAdapter = new GenericAdapter(this, mentors);
         mentorAdapter.setDb(db);
         mentorRecyclerView.setAdapter(mentorAdapter);

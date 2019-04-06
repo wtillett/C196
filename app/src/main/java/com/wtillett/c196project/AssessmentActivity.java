@@ -14,6 +14,7 @@ import android.view.View;
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Assessment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssessmentActivity extends AppCompatActivity {
@@ -51,7 +52,7 @@ public class AssessmentActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
-        List<Assessment> assessments = db.appDao().getAllAssessments();
+        ArrayList<Assessment> assessments = new ArrayList<>(db.appDao().getAllAssessments());
         GenericAdapter adapter = new GenericAdapter(this, assessments);
         adapter.setDb(db);
         recyclerView.setAdapter(adapter);
