@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity(tableName = "course_table",
         foreignKeys = @ForeignKey(
@@ -29,9 +31,9 @@ public class Course implements Serializable {
 
     public Integer termId;
 
-    public String startDate;
+    public LocalDate startDate;
 
-    public String endDate;
+    public LocalDate endDate;
 
     public String status;
 
@@ -41,13 +43,13 @@ public class Course implements Serializable {
         this.id = idSource++;
         this.termId = null;
         this.title = "";
-        this.startDate = "";
-        this.endDate = "";
+        this.startDate = null;
+        this.endDate = null;
         this.status = "";
         this.notes = "";
     }
 
-    public Course(String title, String startDate, String endDate, String status, String notes) {
+    public Course(String title, LocalDate startDate, LocalDate endDate, String status, String notes) {
         this.id = idSource++;
         this.termId = null;
         this.title = title;
@@ -57,8 +59,8 @@ public class Course implements Serializable {
         this.notes = notes;
     }
 
-    public Course(Integer termId, @NonNull String title, String startDate,
-                  String endDate, String status, String notes) {
+    public Course(Integer termId, @NonNull String title, LocalDate startDate,
+                  LocalDate endDate, String status, String notes) {
         this.id = idSource++;
         this.termId = (termId != -1) ? termId : null;
         this.title = title;

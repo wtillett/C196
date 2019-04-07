@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity(tableName = "term_table")
 public class Term implements Serializable {
@@ -18,11 +19,11 @@ public class Term implements Serializable {
 
     public String title;
 
-    public String startDate;
+    public LocalDate startDate;
 
-    public String endDate;
+    public LocalDate endDate;
 
-    public Term(String title, String startDate, String endDate) {
+    public Term(String title, LocalDate startDate, LocalDate endDate) {
         this.id = idSource++;
         this.title = title;
         this.startDate = startDate;

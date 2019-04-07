@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity(tableName = "assessment_table",
         foreignKeys = @ForeignKey(
@@ -27,11 +29,11 @@ public class Assessment implements Serializable {
 
     public String title;
 
-    public String goalDate;
+    public LocalDate goalDate;
 
     public boolean isObjective;
 
-    public Assessment(Integer courseId, String title, String goalDate, boolean isObjective) {
+    public Assessment(Integer courseId, String title, LocalDate goalDate, boolean isObjective) {
         this.id = idSource++;
         this.courseId = courseId;
         this.title = title;
@@ -39,7 +41,7 @@ public class Assessment implements Serializable {
         this.isObjective = isObjective;
     }
 
-    public Assessment(String title, String goalDate, boolean isObjective) {
+    public Assessment(String title, LocalDate goalDate, boolean isObjective) {
         this.id = idSource++;
         this.courseId = null;
         this.title = title;
@@ -51,7 +53,7 @@ public class Assessment implements Serializable {
         this.id = idSource++;
         this.courseId = null;
         this.title = "";
-        this.goalDate = "";
+        this.goalDate = null;
         this.isObjective = true;
     }
 

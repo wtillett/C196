@@ -1,5 +1,6 @@
 package com.wtillett.c196project;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +20,14 @@ import com.wtillett.c196project.database.Assessment;
 import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Mentor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    private Course course;
+    private Course course = new Course();
     private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
 
@@ -44,6 +48,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseEndDate = findViewById(R.id.courseEndDate);
         courseStatus = findViewById(R.id.courseStatus);
         courseNotes = findViewById(R.id.courseNotes);
+        ImageButton startDateButton = findViewById(R.id.startDateButton);
+        ImageButton endDateButton = findViewById(R.id.endDateButton);
 
         Intent intent = getIntent();
         // If a new course is being added, courseId will be set to -1
@@ -54,8 +60,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             course = db.appDao().getCourse(courseId);
             courseDetailHeader.setText(R.string.edit_course);
             courseTitle.setText(course.title);
-            courseStartDate.setText(course.startDate);
-            courseEndDate.setText(course.endDate);
+            courseStartDate.setText(course.startDate.toString());
+            courseEndDate.setText(course.endDate.toString());
             courseStatus.setText(course.status);
             courseNotes.setText(course.notes);
         } else if (termId != -1) {
@@ -65,6 +71,37 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
 
         setRecyclerViews();
+
+        startDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(courseStartDate);
+            }
+        });
+
+        endDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(courseEndDate);
+            }
+        });
+    }
+
+    private void showDatePickerDialog(final EditText editText) {
+        DatePickerDialog dialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        editText.setText(localDate.toString());
+                    }
+                },
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        dialog.show();
     }
 
     // Ensures recyclerview refreshes when activity is resumed
@@ -75,19 +112,24 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void setRecyclerViews() {
-        RecyclerView assessmentRecyclerView = findViewById(R.id.assessmentRecyclerView);
-        ArrayList<Assessment> assessments = new ArrayList<>(db.appDao().getAssessments(course.id));
-        GenericAdapter assessmentAdapter = new GenericAdapter(this, assessments);
-        assessmentAdapter.setDb(db);
-        assessmentRecyclerView.setAdapter(assessmentAdapter);
-        assessmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(COURSE_ID, -1);
 
-        RecyclerView mentorRecyclerView = findViewById(R.id.mentorRecyclerView);
-        ArrayList<Mentor> mentors = new ArrayList<>(db.appDao().getMentors(course.id));
-        GenericAdapter mentorAdapter = new GenericAdapter(this, mentors);
-        mentorAdapter.setDb(db);
-        mentorRecyclerView.setAdapter(mentorAdapter);
-        mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (id != -1) {
+            RecyclerView assessmentRecyclerView = findViewById(R.id.assessmentRecyclerView);
+            ArrayList<Assessment> assessments = new ArrayList<>(db.appDao().getAssessments(course.id));
+            GenericAdapter assessmentAdapter = new GenericAdapter(this, assessments);
+            assessmentAdapter.setDb(db);
+            assessmentRecyclerView.setAdapter(assessmentAdapter);
+            assessmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            RecyclerView mentorRecyclerView = findViewById(R.id.mentorRecyclerView);
+            ArrayList<Mentor> mentors = new ArrayList<>(db.appDao().getMentors(course.id));
+            GenericAdapter mentorAdapter = new GenericAdapter(this, mentors);
+            mentorAdapter.setDb(db);
+            mentorRecyclerView.setAdapter(mentorAdapter);
+            mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     public void addAssessment(View view) {
@@ -106,8 +148,8 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     public void saveCourse(View view) {
         course.title = courseTitle.getText().toString();
-        course.startDate = courseStartDate.getText().toString();
-        course.endDate = courseEndDate.getText().toString();
+        course.startDate = LocalDate.parse(courseStartDate.getText().toString());
+        course.endDate = LocalDate.parse(courseEndDate.getText().toString());
         course.status = courseStatus.getText().toString();
         course.notes = courseNotes.getText().toString();
 

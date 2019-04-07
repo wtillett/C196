@@ -9,10 +9,11 @@ import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Term;
 
+import java.time.LocalDate;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    public static final int TERM = 1, COURSE = 2, ASSESSMENT = 3;
 
     // TODO: Convert ALL dates to a real date format
     // TODO: Add application title and icon
@@ -40,13 +41,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void populateDB(View view) {
-        db.appDao().insertTerm(new Term("Term 1", "01/01/2019", "06/30/2019"));
-        db.appDao().insertTerm(new Term("Term 2", "07/01/2019", "12/31/2019"));
-        Term term = new Term("Term 3", "01/01/2020", "butt");
+        db.appDao().insertTerm(new Term("Term 1",
+                LocalDate.parse("2019-01-01"), LocalDate.parse("2019-06-30")));
+        db.appDao().insertTerm(new Term("Term 2",
+                LocalDate.parse("2019-07-01"), LocalDate.parse("2019-12-31")));
+        Term term = new Term("Term 3",
+                LocalDate.parse("2020-01-01"), LocalDate.parse("2020-06-30"));
         db.appDao().insertTerm(term);
-        db.appDao().insertCourse(new Course(term.id, "Math", "123", "456",
+        db.appDao().insertCourse(new Course(term.id, "Math",
+                LocalDate.parse("2019-01-01"), LocalDate.parse("2019-06-30"),
                 "in progress", "sucks"));
-        db.appDao().insertCourse(new Course("English", "234", "567",
+        db.appDao().insertCourse(new Course("English",
+                LocalDate.parse("2019-07-01"), LocalDate.parse("2019-12-31"),
                 "just started", "is great"));
     }
 

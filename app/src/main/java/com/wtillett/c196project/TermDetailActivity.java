@@ -1,5 +1,6 @@
 package com.wtillett.c196project;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,13 +19,16 @@ import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Term;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 public class TermDetailActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    private EditText termTitle, termStartDate, termEndDate;
+    private EditText termTitle;
+    private TextView termStartDate, termEndDate;
+    private DatePickerDialog.OnDateSetListener startDateListener, endDateListener;
     public static final String TERM_ID = "term_id";
     private Term term;
 
@@ -38,6 +44,8 @@ public class TermDetailActivity extends AppCompatActivity {
         termTitle = findViewById(R.id.termTitle);
         termStartDate = findViewById(R.id.termStartDate);
         termEndDate = findViewById(R.id.termEndDate);
+        ImageButton startDateButton = findViewById(R.id.startDateButton);
+        ImageButton endDateButton = findViewById(R.id.endDateButton);
 
         Intent intent = getIntent();
         // If a new term is being added, termId will be set to -1
@@ -47,14 +55,45 @@ public class TermDetailActivity extends AppCompatActivity {
             term = db.appDao().getTerm(termId);
             termDetailHeader.setText(R.string.edit_term);
             termTitle.setText(term.title);
-            termStartDate.setText(term.startDate);
-            termEndDate.setText(term.endDate);
+            termStartDate.setText(term.startDate.toString());
+            termEndDate.setText(term.endDate.toString());
         } else {
             term = new Term();
             termDetailHeader.setText(R.string.add_term);
         }
 
         setRecyclerView();
+
+        startDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(termStartDate);
+            }
+        });
+
+        endDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(termEndDate);
+            }
+        });
+    }
+
+    private void showDatePickerDialog(final TextView textView) {
+        DatePickerDialog dialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        textView.setText(localDate.toString());
+                    }
+                },
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        dialog.show();
     }
 
     // Ensures recyclerview refreshes when activity is resumed
@@ -82,8 +121,8 @@ public class TermDetailActivity extends AppCompatActivity {
 
     public void saveTerm(View view) {
         term.title = termTitle.getText().toString();
-        term.startDate = termStartDate.getText().toString();
-        term.endDate = termEndDate.getText().toString();
+        term.startDate = LocalDate.parse(termStartDate.getText().toString());
+        term.endDate = LocalDate.parse(termEndDate.getText().toString());
 
         if (db.appDao().getTerm(term.id) == null) {
             db.appDao().insertTerm(term);
@@ -93,6 +132,7 @@ public class TermDetailActivity extends AppCompatActivity {
 
         finish();
     }
+
     public void deleteTerm(View view) {
         // Check to see if term has courses assigned to it
         // If it does, don't allow delete and show toast
@@ -100,7 +140,7 @@ public class TermDetailActivity extends AppCompatActivity {
             Toast.makeText(this,
                     "Cannot delete a term with courses assigned to it.",
                     Toast.LENGTH_LONG).show();
-        // If not, delete the term and return to the term list
+            // If not, delete the term and return to the term list
         } else {
             db.appDao().deleteTerm(term);
             finish();
