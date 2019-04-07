@@ -28,7 +28,6 @@ public class TermDetailActivity extends AppCompatActivity {
     private AppDatabase db;
     private EditText termTitle;
     private TextView termStartDate, termEndDate;
-    private DatePickerDialog.OnDateSetListener startDateListener, endDateListener;
     public static final String TERM_ID = "term_id";
     private Term term;
 

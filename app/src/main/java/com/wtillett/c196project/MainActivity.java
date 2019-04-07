@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
 
-    // TODO: Convert ALL dates to a real date format
     // TODO: Add application title and icon
     // TODO: Add an ActionBar
     // TODO: Programmatically add to the UI
