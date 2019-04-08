@@ -34,4 +34,6 @@
     <string name="finish_by">Finish By:</string>
     <string name="objective">Objective</string>
     <string name="mentors">Mentors:</string>
+    <string name="alarm_on">Alarm On</string>
+    <string name="alarm_off">Alarm Off</string>
 </resources>

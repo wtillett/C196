@@ -11,7 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MentorDetailActivity"></activity>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+
+        <activity android:name=".MentorDetailActivity" />
         <activity
             android:name=".AssessmentDetailActivity"
             android:label="Assessment Detail"

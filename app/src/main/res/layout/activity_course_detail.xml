@@ -287,5 +287,18 @@
             app:layout_constraintTop_toBottomOf="@+id/startDateButton"
             app:srcCompat="@drawable/ic_fab_date" />
 
+        <ToggleButton
+            android:id="@+id/alarmToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:textOn="@string/alarm_on"
+            android:textOff="@string/alarm_off"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/courseSaveButton"
+            app:layout_constraintStart_toEndOf="@+id/cancelButton" />
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
