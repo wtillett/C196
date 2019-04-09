@@ -10,9 +10,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -29,6 +31,8 @@ import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Mentor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +43,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     private Course course = new Course();
     private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
+
+    private NotificationManager notificationManager;
+    private static final String COURSE_CHANNEL_ID = "course_notification_channel";
 
     // TODO: Implement alerts for start and end dates
     // TODO: Implement note sharing via e-mail or SMS
@@ -80,6 +87,38 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseDetailHeader.setText(R.string.add_course);
         }
 
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyIntent.putExtra(COURSE_ID, course.id);
+        final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
+                (this, course.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String toastMessage;
+                if (isChecked) {
+                    LocalDateTime dt = course.endDate.atStartOfDay();
+                    long millis =
+                            dt.toInstant(ZoneOffset.UTC).toEpochMilli();
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,
+                            millis,
+                            notifyPendingIntent);
+                    toastMessage = "Alarm on";
+                } else {
+                    if (alarmManager != null)
+                        alarmManager.cancel(notifyPendingIntent);
+                    toastMessage = "Alarm off";
+                }
+                Toast.makeText(CourseDetailActivity.this, toastMessage, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        createNotificationChannel();
+
         setRecyclerViews();
 
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +135,23 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNotificationChannel() {
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    COURSE_CHANNEL_ID,
+                    "Course notification",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            channel.enableVibration(true);
+            channel.setDescription("Notifies on the end date of a course");
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
 
     private void showDatePickerDialog(final EditText editText) {
         DatePickerDialog dialog = new DatePickerDialog(
