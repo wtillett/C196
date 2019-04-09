@@ -40,10 +40,6 @@ public class CourseDetailActivity extends AppCompatActivity {
     private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
 
-    private NotificationManager notificationManager;
-    private static final int NOTIFICATION_ID = 0;
-    private static final String COURSE_CHANNEL_ID = "course_notification_channel";
-
     // TODO: Implement alerts for start and end dates
     // TODO: Implement note sharing via e-mail or SMS
 
@@ -65,8 +61,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         ImageButton endDateButton = findViewById(R.id.endDateButton);
         ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
 
-
-
         Intent intent = getIntent();
         // If a new course is being added, courseId will be set to -1
         int courseId = intent.getIntExtra(COURSE_ID, -1);
@@ -86,39 +80,6 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseDetailHeader.setText(R.string.add_course);
         }
 
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-        notifyIntent.putExtra(COURSE_ID, course.id);
-        boolean alarmUp = (PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent,
-                PendingIntent.FLAG_NO_CREATE) != null);
-        alarmToggle.setChecked(alarmUp);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String toastMessage;
-                if (isChecked) {
-                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            course.endDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
-                            pendingIntent);
-                    toastMessage = "Alarm for " + course.title + " set!";
-                } else {
-                    if (alarmManager != null)
-                        alarmManager.cancel(pendingIntent);
-                    notificationManager.cancel(NOTIFICATION_ID);
-                    toastMessage = "Alarm for " + course.title + " cancelled!";
-                }
-
-                Toast.makeText(CourseDetailActivity.this, toastMessage, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        createNotificationChannel();
-
         setRecyclerViews();
 
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -134,21 +95,6 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showDatePickerDialog(courseEndDate);
             }
         });
-    }
-
-    private void createNotificationChannel() {
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    COURSE_CHANNEL_ID,
-                    "Course reminder notification",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-
-            channel.enableVibration(true);
-            channel.setDescription("Notifies on the end date of a term");
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 
     private void showDatePickerDialog(final EditText editText) {
