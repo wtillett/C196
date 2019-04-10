@@ -39,7 +39,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
 
-    // TODO: Implement alerts for goal dates
+    // TODO: Maybe make alarmToggle only appear when assessment has been saved
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

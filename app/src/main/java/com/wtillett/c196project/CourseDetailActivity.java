@@ -48,6 +48,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
 
     // TODO: Implement note sharing via e-mail or SMS
+    // TODO: Maybe make alarmToggle only appear when course has been saved
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

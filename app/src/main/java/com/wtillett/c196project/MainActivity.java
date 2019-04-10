@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: Add application title and icon
     // TODO: Add an ActionBar
     // TODO: Programmatically add to the UI
+    // TODO: Make landscape layout variants where necessary
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
