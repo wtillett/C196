@@ -40,14 +40,13 @@ import java.util.Calendar;
 public class CourseDetailActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    private Course course = new Course();
+    private Course course;
     private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
     public static final String COURSE_ID = "course_id";
 
     private NotificationManager notificationManager;
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
 
-    // TODO: Implement alerts for start and end dates
     // TODO: Implement note sharing via e-mail or SMS
 
     @Override
@@ -81,9 +80,10 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseEndDate.setText(course.endDate.toString());
             courseStatus.setText(course.status);
             courseNotes.setText(course.notes);
-        } else if (termId != -1) {
+        } else {
             course = new Course();
-            course.termId = termId;
+            if (termId != -1)
+                course.termId = termId;
             courseDetailHeader.setText(R.string.add_course);
         }
 
@@ -98,7 +98,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String toastMessage;
                 if (isChecked) {
                     LocalDateTime dt = course.endDate.atStartOfDay();
                     long millis =
@@ -106,14 +105,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                     alarmManager.set(AlarmManager.RTC_WAKEUP,
                             millis,
                             notifyPendingIntent);
-                    toastMessage = "Alarm on";
                 } else {
-                    if (alarmManager != null)
+                    if (alarmManager != null) {
                         alarmManager.cancel(notifyPendingIntent);
-                    toastMessage = "Alarm off";
+                        notificationManager.cancel(course.id);
+                    }
                 }
-                Toast.makeText(CourseDetailActivity.this, toastMessage, Toast.LENGTH_SHORT)
-                        .show();
             }
         });
 
@@ -150,8 +147,6 @@ public class CourseDetailActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-
 
     private void showDatePickerDialog(final EditText editText) {
         DatePickerDialog dialog = new DatePickerDialog(

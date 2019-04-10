@@ -1,22 +1,31 @@
 package com.wtillett.c196project;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Assessment;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 
 public class AssessmentDetailActivity extends AppCompatActivity {
@@ -26,6 +35,9 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private EditText assessmentTitle, assessmentGoalDate;
     private Switch isObjectiveSwitch;
     public static final String ASSESSMENT_ID = "assessment_id";
+
+    private NotificationManager notificationManager;
+    private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
 
     // TODO: Implement alerts for goal dates
 
@@ -42,6 +54,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         assessmentGoalDate = findViewById(R.id.assessmentGoalDate);
         isObjectiveSwitch = findViewById(R.id.isObjectiveSwitch);
         ImageButton goalDateButton = findViewById(R.id.goalDateButton);
+        ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
 
         Intent intent = getIntent();
         // If a new assessment is being added, assessmentId will be set to -1
@@ -54,9 +67,10 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             assessmentTitle.setText(assessment.title);
             assessmentGoalDate.setText(assessment.goalDate.toString());
             isObjectiveSwitch.setChecked(assessment.isObjective);
-        } else if (courseId != -1) {
+        } else {
             assessment = new Assessment();
-            assessment.courseId = courseId;
+            if (courseId != -1)
+                assessment.courseId = courseId;
             assessmentDetailHeader.setText(R.string.add_assessment);
         }
 
@@ -66,6 +80,50 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 showDatePickerDialog(assessmentGoalDate);
             }
         });
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyIntent.putExtra(ASSESSMENT_ID, assessment.id);
+        final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
+                (this, assessment.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    LocalDateTime dt = assessment.goalDate.atStartOfDay();
+                    long millis =
+                            dt.toInstant(ZoneOffset.UTC).toEpochMilli();
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,
+                            millis,
+                            notifyPendingIntent);
+                } else {
+                    if (alarmManager != null) {
+                        alarmManager.cancel(notifyPendingIntent);
+                        notificationManager.cancel(assessment.id);
+                    }
+                }
+            }
+        });
+
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    ASSESSMENT_CHANNEL_ID,
+                    "Assessment Notification",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            channel.enableVibration(true);
+            channel.setDescription("Notifies on the goal date of an assessment");
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void showDatePickerDialog(final EditText editText) {
