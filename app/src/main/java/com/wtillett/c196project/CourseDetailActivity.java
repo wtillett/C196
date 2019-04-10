@@ -48,7 +48,6 @@ public class CourseDetailActivity extends AppCompatActivity {
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
 
     // TODO: Implement note sharing via e-mail or SMS
-    // TODO: Maybe make alarmToggle only appear when course has been saved
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +80,24 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseEndDate.setText(course.endDate.toString());
             courseStatus.setText(course.status);
             courseNotes.setText(course.notes);
+            alarmToggle.setEnabled(true);
         } else {
             course = new Course();
             if (termId != -1)
                 course.termId = termId;
             courseDetailHeader.setText(R.string.add_course);
+            alarmToggle.setEnabled(false);
         }
+
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent notifyIntent = new Intent(this, AlarmReceiver.class);
         notifyIntent.putExtra(COURSE_ID, course.id);
+
+        boolean alarmUp = (PendingIntent.getBroadcast(this, course.id, notifyIntent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        alarmToggle.setChecked(alarmUp);
+
         final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
                 (this, course.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

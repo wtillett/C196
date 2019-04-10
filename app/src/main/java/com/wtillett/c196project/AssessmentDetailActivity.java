@@ -39,8 +39,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
 
-    // TODO: Maybe make alarmToggle only appear when assessment has been saved
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,11 +65,13 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             assessmentTitle.setText(assessment.title);
             assessmentGoalDate.setText(assessment.goalDate.toString());
             isObjectiveSwitch.setChecked(assessment.isObjective);
+            alarmToggle.setEnabled(true);
         } else {
             assessment = new Assessment();
             if (courseId != -1)
                 assessment.courseId = courseId;
             assessmentDetailHeader.setText(R.string.add_assessment);
+            alarmToggle.setEnabled(false);
         }
 
         goalDateButton.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +84,10 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent notifyIntent = new Intent(this, AlarmReceiver.class);
         notifyIntent.putExtra(ASSESSMENT_ID, assessment.id);
+
+        boolean alarmUp = (PendingIntent.getBroadcast(this, assessment.id, notifyIntent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        alarmToggle.setChecked(alarmUp);
         final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
                 (this, assessment.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
