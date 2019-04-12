@@ -1,147 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    tools:context=".AssessmentDetailActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".AssessmentDetailActivity">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/assessmentDetailHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/edit_assessment"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:text="@string/title"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentDetailHeader" />
+    </android.support.design.widget.AppBarLayout>
 
-        <EditText
-            android:id="@+id/assessmentTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
-            app:layout_constraintStart_toEndOf="@+id/textView8" />
+    <include layout="@layout/content_assessment_detail" />
 
-        <Button
-            android:id="@+id/deleteAssessmentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="deleteAssessment"
-            android:text="@string/delete"
-            app:layout_constraintBaseline_toBaselineOf="@+id/assessmentTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/assessmentTitle" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/finish_by"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <EditText
-            android:id="@+id/assessmentGoalDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:editable="false"
-            android:ems="10"
-            android:enabled="false"
-            android:inputType="date"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
-            app:layout_constraintEnd_toStartOf="@+id/goalDateButton"
-            app:layout_constraintStart_toEndOf="@+id/textView9" />
-
-        <Switch
-            android:id="@+id/isObjectiveSwitch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:checked="false"
-            android:text="@string/objective"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textSize="18sp"
-            app:fontFamily="sans-serif"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentGoalDate" />
-
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:onClick="cancelEdit"
-            android:text="@string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:onClick="saveAssessment"
-            android:text="@string/save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <ImageButton
-            android:id="@+id/goalDateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deleteAssessmentButton"
-            app:srcCompat="@drawable/ic_fab_date" />
-
-        <ToggleButton
-            android:id="@+id/alarmToggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:textOn="@string/alarm_on"
-            android:textOff="@string/alarm_off"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveButton"
-            app:layout_constraintStart_toEndOf="@+id/cancelButton" />
-
-    </android.support.constraint.ConstraintLayout>
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

@@ -14,9 +14,18 @@
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
-        <activity android:name=".MentorDetailActivity" />
+        <activity
+            android:name=".MentorDetailActivity"
+            android:label="Mentor Detail"
+            android:parentActivityName=".CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.wtillett.c196project.CourseDetailActivity" />
+        </activity>
+
         <activity
             android:name=".AssessmentDetailActivity"
             android:label="Assessment Detail"
@@ -38,7 +47,8 @@
         <activity
             android:name=".TermDetailActivity"
             android:label="Term Detail"
-            android:parentActivityName=".TermActivity">
+            android:parentActivityName=".TermActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wtillett.c196project.TermActivity" />

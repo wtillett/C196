@@ -9,12 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -32,7 +30,6 @@ import com.wtillett.c196project.database.Mentor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,6 +51,9 @@ public class CourseDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
@@ -66,6 +66,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         ImageButton startDateButton = findViewById(R.id.startDateButton);
         ImageButton endDateButton = findViewById(R.id.endDateButton);
         ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
+        alarmToggle.setChecked(false);
 
         Intent intent = getIntent();
         // If a new course is being added, courseId will be set to -1

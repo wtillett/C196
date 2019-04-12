@@ -7,9 +7,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -44,6 +44,9 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_detail);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
@@ -53,6 +56,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         isObjectiveSwitch = findViewById(R.id.isObjectiveSwitch);
         ImageButton goalDateButton = findViewById(R.id.goalDateButton);
         ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
+        alarmToggle.setChecked(false);
 
         Intent intent = getIntent();
         // If a new assessment is being added, assessmentId will be set to -1
