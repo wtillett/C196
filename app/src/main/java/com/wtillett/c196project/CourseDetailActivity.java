@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -44,8 +47,6 @@ public class CourseDetailActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
 
-    // TODO: Implement note sharing via e-mail or SMS
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,6 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
-        TextView courseDetailHeader = findViewById(R.id.courseDetailHeader);
         courseTitle = findViewById(R.id.courseTitle);
         courseStartDate = findViewById(R.id.courseStartDate);
         courseEndDate = findViewById(R.id.courseEndDate);
@@ -75,7 +75,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         if (courseId != -1) {
             course = db.appDao().getCourse(courseId);
-            courseDetailHeader.setText(R.string.edit_course);
+            this.setTitle(R.string.edit_course);
             courseTitle.setText(course.title);
             courseStartDate.setText(course.startDate.toString());
             courseEndDate.setText(course.endDate.toString());
@@ -86,7 +86,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             course = new Course();
             if (termId != -1)
                 course.termId = termId;
-            courseDetailHeader.setText(R.string.add_course);
+            this.setTitle(R.string.add_course);
             alarmToggle.setEnabled(false);
         }
 
@@ -140,6 +140,30 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showDatePickerDialog(courseEndDate);
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareNotes();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void shareNotes() {
+        String text = course.title + ": " + course.notes;
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setType("text/plain")
+                .setChooserTitle("Share course notes with: ")
+                .setText(text)
+                .startChooser();
     }
 
     private void createNotificationChannel() {

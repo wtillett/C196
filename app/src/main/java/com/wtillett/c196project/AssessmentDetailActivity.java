@@ -50,7 +50,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
-        TextView assessmentDetailHeader = findViewById(R.id.assessmentDetailHeader);
         assessmentTitle = findViewById(R.id.assessmentTitle);
         assessmentGoalDate = findViewById(R.id.assessmentGoalDate);
         isObjectiveSwitch = findViewById(R.id.isObjectiveSwitch);
@@ -65,7 +64,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
         if (assessmentId != -1) {
             assessment = db.appDao().getAssessment(assessmentId);
-            assessmentDetailHeader.setText(R.string.edit_assessment);
+            this.setTitle(R.string.edit_assessment);
             assessmentTitle.setText(assessment.title);
             assessmentGoalDate.setText(assessment.goalDate.toString());
             isObjectiveSwitch.setChecked(assessment.isObjective);
@@ -74,7 +73,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             assessment = new Assessment();
             if (courseId != -1)
                 assessment.courseId = courseId;
-            assessmentDetailHeader.setText(R.string.add_assessment);
+            this.setTitle(R.string.add_assessment);
             alarmToggle.setEnabled(false);
         }
 

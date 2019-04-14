@@ -45,7 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 context, assessment.id, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder
                 (context, ASSESSMENT_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_fab_date)
+                .setSmallIcon(R.drawable.ic_date)
                 .setContentTitle("Assessment goal date")
                 .setContentText("Your goal to finish " + assessment.title + " is today!")
                 .setContentIntent(contentPendingIntent)
@@ -61,7 +61,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 context, course.id, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder
                 (context, COURSE_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_fab_date)
+                .setSmallIcon(R.drawable.ic_date)
                 .setContentTitle("Course ending today")
                 .setContentText(course.title + " is ending today!")
                 .setContentIntent(contentPendingIntent)

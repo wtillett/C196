@@ -7,9 +7,6 @@
     <string name="term_list_title">Terms</string>
     <string name="course_list_title">All Courses</string>
     <string name="assessment_list_title">All Assessments</string>
-    <string name="title_activity_term">TermActivity</string>
-    <string name="title_activity_course">CourseActivity</string>
-    <string name="title_activity_assessment">AssessmentActivity</string>
     <string name="edit_term">Edit Term</string>
     <string name="add_term">Add Term</string>
     <string name="edit_course">Edit Course</string>
@@ -36,4 +33,9 @@
     <string name="mentors">Mentors:</string>
     <string name="alarm_on">Alarm On</string>
     <string name="alarm_off">Alarm Off</string>
+    <string name="title_activity_main">C196 Project</string>
+    <string name="title_activity_term">All Terms</string>
+    <string name="title_activity_course">All Courses</string>
+    <string name="title_activity_assessment">All Assessments</string>
+    <string name="share">Share</string>
 </resources>

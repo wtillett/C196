@@ -15,27 +15,15 @@
         tools:context=".TermDetailActivity">
 
         <TextView
-            android:id="@+id/termDetailHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/edit_term"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="24dp"
             android:text="@string/title"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/termDetailHeader" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView4"
@@ -174,7 +162,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deleteTermButton"
-            app:srcCompat="@drawable/ic_fab_date" />
+            app:srcCompat="@drawable/ic_date" />
 
         <ImageButton
             android:id="@+id/endDateButton"
@@ -184,7 +172,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/startDateButton"
-            app:srcCompat="@drawable/ic_fab_date" />
+            app:srcCompat="@drawable/ic_date" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -43,7 +43,6 @@ public class TermDetailActivity extends AppCompatActivity {
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
-        TextView termDetailHeader = findViewById(R.id.termDetailHeader);
         termTitle = findViewById(R.id.termTitle);
         termStartDate = findViewById(R.id.termStartDate);
         termEndDate = findViewById(R.id.termEndDate);
@@ -56,13 +55,13 @@ public class TermDetailActivity extends AppCompatActivity {
 
         if (termId != -1) {
             term = db.appDao().getTerm(termId);
-            termDetailHeader.setText(R.string.edit_term);
+            this.setTitle(R.string.edit_term);
             termTitle.setText(term.title);
             termStartDate.setText(term.startDate.toString());
             termEndDate.setText(term.endDate.toString());
         } else {
             term = new Term();
-            termDetailHeader.setText(R.string.add_term);
+            this.setTitle(R.string.add_term);
         }
 
         setRecyclerView();

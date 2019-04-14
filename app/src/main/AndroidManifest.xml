@@ -18,7 +18,6 @@
 
         <activity
             android:name=".MentorDetailActivity"
-            android:label="Mentor Detail"
             android:parentActivityName=".CourseDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -28,7 +27,6 @@
 
         <activity
             android:name=".AssessmentDetailActivity"
-            android:label="Assessment Detail"
             android:parentActivityName=".AssessmentActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -37,7 +35,6 @@
         </activity>
         <activity
             android:name=".CourseDetailActivity"
-            android:label="Course Detail"
             android:parentActivityName=".CourseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -46,7 +43,6 @@
         </activity>
         <activity
             android:name=".TermDetailActivity"
-            android:label="Term Detail"
             android:parentActivityName=".TermActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -80,7 +76,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wtillett.c196project.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

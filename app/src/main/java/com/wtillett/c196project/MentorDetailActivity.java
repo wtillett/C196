@@ -30,7 +30,6 @@ public class MentorDetailActivity extends AppCompatActivity {
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
-        TextView mentorDetailHeader = findViewById(R.id.mentorDetailHeader);
         mentorName = findViewById(R.id.mentorName);
         mentorEmail = findViewById(R.id.mentorEmail);
         mentorPhone = findViewById(R.id.mentorPhone);
@@ -42,14 +41,14 @@ public class MentorDetailActivity extends AppCompatActivity {
 
         if (mentorId != -1) {
             mentor = db.appDao().getMentor(mentorId);
-            mentorDetailHeader.setText(R.string.edit_mentor);
+            this.setTitle(R.string.edit_mentor);
             mentorName.setText(mentor.name);
             mentorEmail.setText(mentor.email);
             mentorPhone.setText(mentor.phone);
         } else if (courseId != -1) {
             mentor = new Mentor();
             mentor.courseId = courseId;
-            mentorDetailHeader.setText(R.string.add_mentor);
+            this.setTitle(R.string.add_mentor);
         }
     }
 
