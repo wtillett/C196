@@ -22,7 +22,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -142,15 +141,20 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_share_delete, menu);
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_share) {
             shareNotes();
+            return true;
+        } else if (id == R.id.action_delete) {
+            deleteCourse();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -254,7 +258,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void deleteCourse(View view) {
+    public void deleteCourse() {
         // Check to see if course has assessments assigned to it
         if (db.appDao().getAssessments(course.id).size() != 0)
             // If it does, don't allow delete and show toast

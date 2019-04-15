@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -118,6 +120,22 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         createNotificationChannel();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_delete) {
+            deleteAssessment();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void createNotificationChannel() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -163,7 +181,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void deleteAssessment(View view) {
+    public void deleteAssessment() {
         db.appDao().deleteAssessment(assessment);
         finish();
     }

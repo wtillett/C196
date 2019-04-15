@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.wtillett.c196project.database.AppDatabase;
@@ -27,18 +29,9 @@ public class TermActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db = AppDatabase.getDatabase(getApplicationContext());
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, TermDetailActivity.class);
-                context.startActivity(intent);
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         setRecyclerView();
     }
@@ -47,6 +40,24 @@ public class TermActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setRecyclerView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            Context context = TermActivity.this;
+            Intent intent = new Intent(context, TermDetailActivity.class);
+            context.startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setRecyclerView() {

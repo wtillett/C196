@@ -74,9 +74,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView3"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView3" />
 
         <EditText
@@ -85,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:editable="false"
             android:ems="10"
             android:enabled="false"
             android:inputType="date"
@@ -98,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:editable="false"
             android:ems="10"
             android:enabled="false"
             android:inputType="date"
@@ -116,18 +120,6 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView10" />
-
-        <Button
-            android:id="@+id/deleteCourseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="deleteCourse"
-            android:text="@string/delete"
-            app:layout_constraintBaseline_toBaselineOf="@+id/courseTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/courseTitle" />
 
         <EditText
             android:id="@+id/courseNotes"
@@ -264,9 +256,10 @@
             android:id="@+id/startDateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deleteCourseButton"
+            app:layout_constraintTop_toBottomOf="@+id/courseTitle"
             app:srcCompat="@drawable/ic_date" />
 
         <ImageButton
