@@ -18,10 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -36,11 +39,12 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CourseDetailActivity extends AppCompatActivity {
+public class CourseDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private AppDatabase db;
     private Course course;
-    private EditText courseTitle, courseStartDate, courseEndDate, courseStatus, courseNotes;
+    private EditText courseTitle, courseStartDate, courseEndDate, courseNotes;
+    private Spinner courseStatus;
     public static final String COURSE_ID = "course_id";
 
     private NotificationManager notificationManager;
@@ -67,6 +71,12 @@ public class CourseDetailActivity extends AppCompatActivity {
         ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
         alarmToggle.setChecked(false);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.status_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        courseStatus.setAdapter(adapter);
+        courseStatus.setOnItemSelectedListener(this);
+
         Intent intent = getIntent();
         // If a new course is being added, courseId will be set to -1
         int courseId = intent.getIntExtra(COURSE_ID, -1);
@@ -78,7 +88,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             courseTitle.setText(course.title);
             courseStartDate.setText(course.startDate.toString());
             courseEndDate.setText(course.endDate.toString());
-            courseStatus.setText(course.status);
+            courseStatus.setSelection(getPosition(course.status));
             courseNotes.setText(course.notes);
             alarmToggle.setEnabled(true);
         } else {
@@ -139,6 +149,15 @@ public class CourseDetailActivity extends AppCompatActivity {
                 showDatePickerDialog(courseEndDate);
             }
         });
+    }
+
+    private int getPosition(String status) {
+        int index = 0;
+        for (int i = 0; i < courseStatus.getCount(); i++) {
+            if (courseStatus.getItemAtPosition(i).equals(status))
+                index = i;
+        }
+        return index;
     }
 
     @Override
@@ -248,7 +267,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         course.title = courseTitle.getText().toString();
         course.startDate = LocalDate.parse(courseStartDate.getText().toString());
         course.endDate = LocalDate.parse(courseEndDate.getText().toString());
-        course.status = courseStatus.getText().toString();
         course.notes = courseNotes.getText().toString();
 
         if (db.appDao().getCourse(course.id) == null)
@@ -274,5 +292,15 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     public void cancelEdit(View view) {
         finish();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        course.status = ((String) parent.getItemAtPosition(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        course.status = "";
     }
 }

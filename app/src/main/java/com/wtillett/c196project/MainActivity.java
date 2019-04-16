@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
         db.appDao().insertTerm(term);
         db.appDao().insertCourse(new Course(term.id, "Math",
                 LocalDate.parse("2019-01-01"), LocalDate.parse("2019-06-30"),
-                "in progress", "sucks"));
+                "In progress", "sucks"));
         db.appDao().insertCourse(new Course("English",
                 LocalDate.parse("2019-07-01"), LocalDate.parse("2019-12-31"),
-                "just started", "is great"));
+                "Completed", "is great"));
     }
 
     public void emptyDB(View view) {

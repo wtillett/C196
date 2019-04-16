@@ -109,14 +109,13 @@
             app:layout_constraintEnd_toStartOf="@+id/endDateButton"
             app:layout_constraintStart_toEndOf="@+id/textView5" />
 
-        <EditText
+        <Spinner
             android:id="@+id/courseStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:inputType="textShortMessage|textCapSentences"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView10" />

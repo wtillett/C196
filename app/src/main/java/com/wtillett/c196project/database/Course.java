@@ -6,9 +6,7 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(tableName = "course_table",
         foreignKeys = @ForeignKey(
@@ -17,9 +15,7 @@ import java.util.Date;
                 childColumns = "termId",
                 onDelete = ForeignKey.RESTRICT),
         indices = {@Index("termId")})
-public class Course implements Serializable {
-
-    // TODO: Course status should only be "in progress", "completed", "dropped", or "plan to take"
+public class Course {
 
     private static Integer idSource = 0;
 

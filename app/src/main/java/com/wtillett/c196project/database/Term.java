@@ -5,11 +5,10 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity(tableName = "term_table")
-public class Term implements Serializable {
+public class Term {
 
     private static Integer idSource = 0;
 

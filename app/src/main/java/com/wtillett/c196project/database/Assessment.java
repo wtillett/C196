@@ -6,9 +6,7 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(tableName = "assessment_table",
         foreignKeys = @ForeignKey(
@@ -17,7 +15,7 @@ import java.util.Date;
                 childColumns = "courseId",
                 onDelete = ForeignKey.RESTRICT),
         indices = {@Index("courseId")})
-public class Assessment implements Serializable {
+public class Assessment {
 
     private static Integer idSource = 0;
 
