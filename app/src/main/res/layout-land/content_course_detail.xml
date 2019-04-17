@@ -15,7 +15,6 @@
         android:baselineAligned="false">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/leftConstraintLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -126,7 +125,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:editable="false"
                 android:ems="10"
                 android:enabled="false"
                 android:inputType="date"
@@ -192,7 +190,6 @@
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/rightConstraintLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -247,7 +244,6 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/bottomRightConstraintLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"

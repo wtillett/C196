@@ -4,9 +4,6 @@
     <string name="course_button_text">View Courses</string>
     <string name="assessment_button_text">View Assessments</string>
     <string name="main_activity_text">Select an option below</string>
-    <string name="term_list_title">Terms</string>
-    <string name="course_list_title">All Courses</string>
-    <string name="assessment_list_title">All Assessments</string>
     <string name="edit_term">Edit Term</string>
     <string name="add_term">Add Term</string>
     <string name="edit_course">Edit Course</string>
