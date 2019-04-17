@@ -14,8 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
 
-    // TODO: Add application title and icon
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

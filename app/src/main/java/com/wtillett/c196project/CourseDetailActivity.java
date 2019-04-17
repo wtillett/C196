@@ -44,14 +44,17 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
     private Course course;
     private EditText courseTitle, courseStartDate, courseEndDate, courseNotes;
     private Spinner courseStatus;
+
+    private AlarmManager alarmManager;
+    private NotificationManager notificationManager;
+    PendingIntent notifyStartDatePendingIntent;
+    PendingIntent notifyEndDatePendingIntent;
+    int startNotificationID;
+    int endNotificationID;
     public static final String COURSE_ID = "course_id";
     private static final String NOTIFICATION_ID = "notification_id";
     private static final String START_DATE_FLAG = "start_date_flag";
-
-    private NotificationManager notificationManager;
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
-
-    // TODO: Alerts should be cancelled when a course or assessment is deleted
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +110,11 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
         Intent endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
         startDateNotifyIntent.putExtra(COURSE_ID, course.id);
         endDateNotifyIntent.putExtra(COURSE_ID, course.id);
-        final int startNotificationID;
+
         if (course.startDate == null)
             startNotificationID = -1;
         else
             startNotificationID = course.id + course.startDate.getDayOfYear();
-        final int endNotificationID;
         if (course.endDate == null)
             endNotificationID = -1;
         else
@@ -125,12 +127,13 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
                 startDateNotifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
         alarmToggle.setChecked(alarmUp);
 
-        final PendingIntent notifyStartDatePendingIntent = PendingIntent.getBroadcast
+
+        notifyStartDatePendingIntent = PendingIntent.getBroadcast
                 (this, startNotificationID, startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final PendingIntent notifyEndDatePendingIntent = PendingIntent.getBroadcast
+        notifyEndDatePendingIntent = PendingIntent.getBroadcast
                 (this, endNotificationID, endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -294,6 +297,12 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
         course.endDate = LocalDate.parse(courseEndDate.getText().toString());
         course.notes = courseNotes.getText().toString();
 
+        if (course.startDate == course.endDate) {
+            Toast.makeText(this, "Start date must be before end date.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (db.appDao().getCourse(course.id) == null)
             db.appDao().insertCourse(course);
         else db.appDao().updateCourses(course);
@@ -309,8 +318,15 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
                     "Cannot delete a course with assessments assigned to it.",
                     Toast.LENGTH_LONG).show();
         else
-            // If not, delete the course and return to the appropriate activity
-            db.appDao().deleteCourse(course);
+            // If not, delete the course and any notifications and return to the appropriate
+            // activity
+            if (alarmManager != null) {
+                alarmManager.cancel(notifyStartDatePendingIntent);
+                alarmManager.cancel(notifyEndDatePendingIntent);
+                notificationManager.cancel(startNotificationID);
+                notificationManager.cancel(endNotificationID);
+            }
+        db.appDao().deleteCourse(course);
 
         finish();
     }
