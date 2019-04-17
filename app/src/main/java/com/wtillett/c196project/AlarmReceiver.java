@@ -18,8 +18,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
     private static final String COURSE_ID = "course_id";
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
+    private static final String NOTIFICATION_ID = "notification_id";
+    private static final String START_DATE_FLAG = "start_date_flag";
     private Assessment assessment;
     private Course course;
+    private int notificationID;
+    private boolean startDateFlag;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,6 +31,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         int assessmentID = intent.getIntExtra(ASSESSMENT_ID, -1);
         int courseID = intent.getIntExtra(COURSE_ID, -1);
+        notificationID = intent.getIntExtra(NOTIFICATION_ID, -1);
+        startDateFlag = intent.getBooleanExtra(START_DATE_FLAG, false);
+
         AppDatabase db = AppDatabase.getDatabase(context);
 
         if (assessmentID != -1) {
@@ -57,16 +64,26 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void deliverCourseNotification(Context context) {
         Intent contentIntent = new Intent(context, CourseDetailActivity.class);
         contentIntent.putExtra(COURSE_ID, course.id);
+        String title;
+        String text;
+        if (startDateFlag) {
+            title = "Course starting today";
+            text = course.title + " is starting today!";
+        } else {
+            title = "Course ending today";
+            text = course.title + " is ending today!";
+        }
+
         PendingIntent contentPendingIntent = PendingIntent.getActivity(
-                context, course.id, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, notificationID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder
                 (context, COURSE_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_date)
-                .setContentTitle("Course ending today")
-                .setContentText(course.title + " is ending today!")
+                .setContentTitle(title)
+                .setContentText(text)
                 .setContentIntent(contentPendingIntent)
                 .setAutoCancel(false)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
-        notificationManager.notify(course.id, builder.build());
+        notificationManager.notify(notificationID, builder.build());
     }
 }

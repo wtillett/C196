@@ -34,7 +34,6 @@ import com.wtillett.c196project.database.Course;
 import com.wtillett.c196project.database.Mentor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,9 +45,13 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
     private EditText courseTitle, courseStartDate, courseEndDate, courseNotes;
     private Spinner courseStatus;
     public static final String COURSE_ID = "course_id";
+    private static final String NOTIFICATION_ID = "notification_id";
+    private static final String START_DATE_FLAG = "start_date_flag";
 
     private NotificationManager notificationManager;
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
+
+    // TODO: Alerts should be cancelled when a course or assessment is deleted
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +102,33 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
             alarmToggle.setEnabled(false);
         }
 
-
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-        notifyIntent.putExtra(COURSE_ID, course.id);
+        Intent startDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+        Intent endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+        startDateNotifyIntent.putExtra(COURSE_ID, course.id);
+        endDateNotifyIntent.putExtra(COURSE_ID, course.id);
+        final int startNotificationID;
+        if (course.startDate == null)
+            startNotificationID = -1;
+        else
+            startNotificationID = course.id + course.startDate.getDayOfYear();
+        final int endNotificationID;
+        if (course.endDate == null)
+            endNotificationID = -1;
+        else
+            endNotificationID = course.id + course.endDate.getDayOfYear();
+        startDateNotifyIntent.putExtra(NOTIFICATION_ID, startNotificationID);
+        startDateNotifyIntent.putExtra(START_DATE_FLAG, true);
+        endDateNotifyIntent.putExtra(NOTIFICATION_ID, endNotificationID);
 
-        boolean alarmUp = (PendingIntent.getBroadcast(this, course.id, notifyIntent,
-                PendingIntent.FLAG_NO_CREATE) != null);
+        boolean alarmUp = (PendingIntent.getBroadcast(this, startNotificationID,
+                startDateNotifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
         alarmToggle.setChecked(alarmUp);
 
-        final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
-                (this, course.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent notifyStartDatePendingIntent = PendingIntent.getBroadcast
+                (this, startNotificationID, startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent notifyEndDatePendingIntent = PendingIntent.getBroadcast
+                (this, endNotificationID, endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -117,16 +136,22 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    LocalDateTime dt = course.endDate.atStartOfDay();
-                    long millis =
-                            dt.toInstant(ZoneOffset.UTC).toEpochMilli();
+                    long startDateMillis = course.startDate.atStartOfDay()
+                            .toInstant(ZoneOffset.UTC).toEpochMilli();
+                    long endDateMillis = course.endDate.atStartOfDay()
+                            .toInstant(ZoneOffset.UTC).toEpochMilli();
                     alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            millis,
-                            notifyPendingIntent);
+                            startDateMillis,
+                            notifyStartDatePendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,
+                            endDateMillis,
+                            notifyEndDatePendingIntent);
                 } else {
                     if (alarmManager != null) {
-                        alarmManager.cancel(notifyPendingIntent);
-                        notificationManager.cancel(course.id);
+                        alarmManager.cancel(notifyStartDatePendingIntent);
+                        alarmManager.cancel(notifyEndDatePendingIntent);
+                        notificationManager.cancel(startNotificationID);
+                        notificationManager.cancel(endNotificationID);
                     }
                 }
             }
@@ -180,7 +205,7 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
     }
 
     public void shareNotes() {
-        String text = course.title + ": " + course.notes;
+        String text = course.title + ":\n" + course.notes;
         ShareCompat.IntentBuilder
                 .from(this)
                 .setType("text/plain")
@@ -199,7 +224,7 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
                     NotificationManager.IMPORTANCE_DEFAULT);
 
             channel.enableVibration(true);
-            channel.setDescription("Notifies on the end date of a course");
+            channel.setDescription("Notifies on the start and end date of a course");
             notificationManager.createNotificationChannel(channel);
         }
     }
