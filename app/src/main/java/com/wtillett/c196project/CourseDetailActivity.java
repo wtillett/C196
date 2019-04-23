@@ -106,8 +106,8 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
         }
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent startDateNotifyIntent = new Intent(this, AlarmReceiver.class);
-        Intent endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+        final Intent startDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+        final Intent endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
         startDateNotifyIntent.putExtra(COURSE_ID, course.id);
         endDateNotifyIntent.putExtra(COURSE_ID, course.id);
 
@@ -128,10 +128,6 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
         alarmToggle.setChecked(alarmUp);
 
 
-        notifyStartDatePendingIntent = PendingIntent.getBroadcast
-                (this, startNotificationID, startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notifyEndDatePendingIntent = PendingIntent.getBroadcast
-                (this, endNotificationID, endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -139,6 +135,12 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    notifyStartDatePendingIntent = PendingIntent.getBroadcast
+                            (CourseDetailActivity.this, startNotificationID,
+                                    startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notifyEndDatePendingIntent = PendingIntent.getBroadcast
+                            (CourseDetailActivity.this, endNotificationID,
+                                    endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     long startDateMillis = course.startDate.atStartOfDay()
                             .toInstant(ZoneOffset.UTC).toEpochMilli();
                     long endDateMillis = course.endDate.atStartOfDay()

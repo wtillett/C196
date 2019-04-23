@@ -57,6 +57,7 @@ public class Assessment {
 
     @Override
     public String toString() {
-        return this.title + "    " + (this.isObjective ? "Objective" : "Performance");
+        return this.title + " " + this.goalDate + "\n" +
+                (this.isObjective ? "Objective" : "Performance") + " Assessment";
     }
 }
