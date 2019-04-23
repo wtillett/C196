@@ -38,23 +38,24 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CourseDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CourseDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
 
-    private AppDatabase db;
-    private Course course;
-    private EditText courseTitle, courseStartDate, courseEndDate, courseNotes;
-    private Spinner courseStatus;
-
-    private AlarmManager alarmManager;
-    private NotificationManager notificationManager;
-    PendingIntent notifyStartDatePendingIntent;
-    PendingIntent notifyEndDatePendingIntent;
-    int startNotificationID;
-    int endNotificationID;
     public static final String COURSE_ID = "course_id";
     private static final String NOTIFICATION_ID = "notification_id";
     private static final String START_DATE_FLAG = "start_date_flag";
     private static final String COURSE_CHANNEL_ID = "course_notification_channel";
+    PendingIntent notifyStartDatePendingIntent;
+    PendingIntent notifyEndDatePendingIntent;
+    int startNotificationID;
+    int endNotificationID;
+    Intent startDateNotifyIntent;
+    Intent endDateNotifyIntent;
+    private AppDatabase db;
+    private Course course;
+    private EditText courseTitle, courseStartDate, courseEndDate, courseNotes;
+    private Spinner courseStatus;
+    private AlarmManager alarmManager;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +107,9 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
         }
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        final Intent startDateNotifyIntent = new Intent(this, AlarmReceiver.class);
-        final Intent endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+
+        startDateNotifyIntent = new Intent(this, AlarmReceiver.class);
+        endDateNotifyIntent = new Intent(this, AlarmReceiver.class);
         startDateNotifyIntent.putExtra(COURSE_ID, course.id);
         endDateNotifyIntent.putExtra(COURSE_ID, course.id);
 
@@ -127,40 +129,9 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
                 startDateNotifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
         alarmToggle.setChecked(alarmUp);
 
-
-
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    notifyStartDatePendingIntent = PendingIntent.getBroadcast
-                            (CourseDetailActivity.this, startNotificationID,
-                                    startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    notifyEndDatePendingIntent = PendingIntent.getBroadcast
-                            (CourseDetailActivity.this, endNotificationID,
-                                    endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    long startDateMillis = course.startDate.atStartOfDay()
-                            .toInstant(ZoneOffset.UTC).toEpochMilli();
-                    long endDateMillis = course.endDate.atStartOfDay()
-                            .toInstant(ZoneOffset.UTC).toEpochMilli();
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            startDateMillis,
-                            notifyStartDatePendingIntent);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            endDateMillis,
-                            notifyEndDatePendingIntent);
-                } else {
-                    if (alarmManager != null) {
-                        alarmManager.cancel(notifyStartDatePendingIntent);
-                        alarmManager.cancel(notifyEndDatePendingIntent);
-                        notificationManager.cancel(startNotificationID);
-                        notificationManager.cancel(endNotificationID);
-                    }
-                }
-            }
-        });
+        alarmToggle.setOnCheckedChangeListener(this);
 
         createNotificationChannel();
 
@@ -345,5 +316,36 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         course.status = "";
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            notifyStartDatePendingIntent = PendingIntent.getBroadcast
+                    (CourseDetailActivity.this, startNotificationID,
+                            startDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notifyEndDatePendingIntent = PendingIntent.getBroadcast
+                    (CourseDetailActivity.this, endNotificationID,
+                            endDateNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            long startDateMillis = course.startDate.atStartOfDay()
+                    .toInstant(ZoneOffset.UTC).toEpochMilli();
+            long endDateMillis = course.endDate.atStartOfDay()
+                    .toInstant(ZoneOffset.UTC).toEpochMilli();
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    startDateMillis,
+                    notifyStartDatePendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    endDateMillis,
+                    notifyEndDatePendingIntent);
+        } else {
+            if (alarmManager != null) {
+                alarmManager.cancel(notifyStartDatePendingIntent);
+                alarmManager.cancel(notifyEndDatePendingIntent);
+                notificationManager.cancel(startNotificationID);
+                notificationManager.cancel(endNotificationID);
+                startDateNotifyIntent = null;
+                endDateNotifyIntent = null;
+            }
+        }
     }
 }

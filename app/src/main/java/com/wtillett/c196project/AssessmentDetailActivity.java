@@ -19,7 +19,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.wtillett.c196project.database.AppDatabase;
@@ -30,16 +29,18 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 
-public class AssessmentDetailActivity extends AppCompatActivity {
+public class AssessmentDetailActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
+    public static final String ASSESSMENT_ID = "assessment_id";
+    private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
+    Intent notifyIntent;
+    PendingIntent notifyPendingIntent;
+    AlarmManager alarmManager;
     private AppDatabase db;
     private Assessment assessment;
     private EditText assessmentTitle, assessmentGoalDate;
     private Switch isObjectiveSwitch;
-    public static final String ASSESSMENT_ID = "assessment_id";
-
     private NotificationManager notificationManager;
-    private static final String ASSESSMENT_CHANNEL_ID = "assessment_notification_channel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,35 +88,16 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         });
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyIntent = new Intent(this, AlarmReceiver.class);
         notifyIntent.putExtra(ASSESSMENT_ID, assessment.id);
 
         boolean alarmUp = (PendingIntent.getBroadcast(this, assessment.id, notifyIntent,
                 PendingIntent.FLAG_NO_CREATE) != null);
         alarmToggle.setChecked(alarmUp);
-        final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
-                (this, assessment.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    LocalDateTime dt = assessment.goalDate.atStartOfDay();
-                    long millis =
-                            dt.toInstant(ZoneOffset.UTC).toEpochMilli();
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            millis,
-                            notifyPendingIntent);
-                } else {
-                    if (alarmManager != null) {
-                        alarmManager.cancel(notifyPendingIntent);
-                        notificationManager.cancel(assessment.id);
-                    }
-                }
-            }
-        });
+        alarmToggle.setOnCheckedChangeListener(this);
 
         createNotificationChannel();
     }
@@ -188,5 +170,25 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     public void cancelEdit(View view) {
         finish();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            notifyPendingIntent = PendingIntent.getBroadcast
+                    (this, assessment.id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            LocalDateTime dt = assessment.goalDate.atStartOfDay();
+            long millis =
+                    dt.toInstant(ZoneOffset.UTC).toEpochMilli();
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    millis,
+                    notifyPendingIntent);
+        } else {
+            if (alarmManager != null) {
+                alarmManager.cancel(notifyPendingIntent);
+                notificationManager.cancel(assessment.id);
+                notifyPendingIntent = null;
+            }
+        }
     }
 }
