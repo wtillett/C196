@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ReportActivity"></activity>
+
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
@@ -24,7 +26,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wtillett.c196project.CourseDetailActivity" />
         </activity>
-
         <activity
             android:name=".AssessmentDetailActivity"
             android:parentActivityName=".AssessmentActivity"
@@ -76,7 +77,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wtillett.c196project.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
