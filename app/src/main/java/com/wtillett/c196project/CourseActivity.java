@@ -3,8 +3,6 @@ package com.wtillett.c196project;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +12,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 
 import com.wtillett.c196project.database.AppDatabase;
 import com.wtillett.c196project.database.Course;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
 
@@ -36,9 +32,8 @@ public class CourseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        EditText searchText = findViewById(R.id.searchText);
+        EditText searchText = findViewById(R.id.courseSearchText);
         searchText.addTextChangedListener(new TextWatcher() {
-            private static final String TAG = "THIS_IS_A_TAG";
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -49,7 +44,6 @@ public class CourseActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 currentSearch = charSequence;
                 setRecyclerView(charSequence);
-                Log.d(TAG, "onTextChanged: " + currentSearch);
             }
 
             @Override
@@ -90,13 +84,10 @@ public class CourseActivity extends AppCompatActivity {
 
     private void setRecyclerView(CharSequence search) {
         ArrayList<Course> allCourses = new ArrayList<>(db.appDao().getAllCourses());
-        ArrayList<Course> filteredCourses;
-        if (search.equals("")) {
-            filteredCourses = allCourses;
-        } else {
-            filteredCourses = (ArrayList<Course>) allCourses.clone();
-        }
-        filteredCourses.removeIf(c -> !c.title.toLowerCase().contains(search.toString().toLowerCase()));
+        ArrayList<Course> filteredCourses = (ArrayList<Course>) allCourses.clone();
+        filteredCourses.removeIf(
+                c -> !c.title.toLowerCase().contains(search.toString().toLowerCase())
+        );
         GenericAdapter adapter = new GenericAdapter(this, filteredCourses);
         adapter.setDb(db);
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
