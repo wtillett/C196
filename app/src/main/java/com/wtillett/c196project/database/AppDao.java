@@ -25,6 +25,9 @@ public interface AppDao {
     @Query("SELECT * FROM term_table WHERE id = :id")
     Term getTerm(Integer id);
 
+    @Query("SELECT * FROM term_table WHERE title = :title")
+    Term getTerm(String title);
+
     @Query("SELECT * FROM term_table")
     List<Term> getAllTerms();
 
