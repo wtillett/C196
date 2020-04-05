@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Mentor;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Mentor;
 
 public class MentorDetailActivity extends AppCompatActivity {
 

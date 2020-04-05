@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.wtillett.c196project">
+    package="com.wtillett.ClassTracker">
 
     <application
         android:allowBackup="true"
@@ -11,76 +11,76 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AssessmentsInTheNextWeekActivity"></activity>
-        <activity android:name=".CoursesPerTermActivity" />
-        <activity android:name=".ReportActivity" />
+        <activity android:name="com.wtillett.ClassTracker.AssessmentsInTheNextWeekActivity" />
+        <activity android:name="com.wtillett.ClassTracker.CoursesPerTermActivity" />
+        <activity android:name="com.wtillett.ClassTracker.ReportActivity" />
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name="com.wtillett.ClassTracker.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".MentorDetailActivity"
-            android:parentActivityName=".CourseDetailActivity"
+            android:name="com.wtillett.ClassTracker.MentorDetailActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.CourseDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.CourseDetailActivity" />
+                android:value="com.wtillett.ClassTracker.CourseDetailActivity" />
         </activity>
         <activity
-            android:name=".AssessmentDetailActivity"
-            android:parentActivityName=".AssessmentActivity"
+            android:name="com.wtillett.ClassTracker.AssessmentDetailActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.AssessmentActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.AssessmentActivity" />
+                android:value="com.wtillett.ClassTracker.AssessmentActivity" />
         </activity>
         <activity
-            android:name=".CourseDetailActivity"
-            android:parentActivityName=".CourseActivity"
+            android:name="com.wtillett.ClassTracker.CourseDetailActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.CourseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.CourseActivity" />
+                android:value="com.wtillett.ClassTracker.CourseActivity" />
         </activity>
         <activity
-            android:name=".TermDetailActivity"
-            android:parentActivityName=".TermActivity"
+            android:name="com.wtillett.ClassTracker.TermDetailActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.TermActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.TermActivity" />
+                android:value="com.wtillett.ClassTracker.TermActivity" />
         </activity>
         <activity
-            android:name=".AssessmentActivity"
+            android:name="com.wtillett.ClassTracker.AssessmentActivity"
             android:label="@string/title_activity_assessment"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.MainActivity" />
+                android:value="com.wtillett.ClassTracker.MainActivity" />
         </activity>
         <activity
-            android:name=".CourseActivity"
+            android:name="com.wtillett.ClassTracker.CourseActivity"
             android:label="@string/title_activity_course"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.MainActivity" />
+                android:value="com.wtillett.ClassTracker.MainActivity" />
         </activity>
         <activity
-            android:name=".TermActivity"
+            android:name="com.wtillett.ClassTracker.TermActivity"
             android:label="@string/title_activity_term"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.wtillett.ClassTracker.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.wtillett.c196project.MainActivity" />
+                android:value="com.wtillett.ClassTracker.MainActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.wtillett.ClassTracker.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

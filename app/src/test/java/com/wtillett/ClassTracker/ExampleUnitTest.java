@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import org.junit.Test;
 

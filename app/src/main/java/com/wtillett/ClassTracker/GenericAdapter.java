@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Assessment;
-import com.wtillett.c196project.database.Course;
-import com.wtillett.c196project.database.Mentor;
-import com.wtillett.c196project.database.Term;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Assessment;
+import com.wtillett.ClassTracker.database.Course;
+import com.wtillett.ClassTracker.database.Mentor;
+import com.wtillett.ClassTracker.database.Term;
 
 import java.util.ArrayList;
 

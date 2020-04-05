@@ -1,12 +1,12 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Assessment;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Assessment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

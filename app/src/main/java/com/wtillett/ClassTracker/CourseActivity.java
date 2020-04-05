@@ -1,9 +1,8 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,17 +11,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Term;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Course;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class TermActivity extends AppCompatActivity {
+public class CourseActivity extends AppCompatActivity {
 
     private AppDatabase db;
     private CharSequence currentSearch = "";
@@ -30,12 +26,12 @@ public class TermActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_term);
+        setContentView(R.layout.activity_course);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        EditText searchText = findViewById(R.id.termSearchText);
+        EditText searchText = findViewById(R.id.courseSearchText);
         searchText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -60,6 +56,7 @@ public class TermActivity extends AppCompatActivity {
         setRecyclerView(currentSearch);
     }
 
+    // Ensures recyclerview refreshes when activity is resumed
     @Override
     protected void onResume() {
         super.onResume();
@@ -76,8 +73,8 @@ public class TermActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            Context context = TermActivity.this;
-            Intent intent = new Intent(context, TermDetailActivity.class);
+            Context context = CourseActivity.this;
+            Intent intent = new Intent(context, CourseDetailActivity.class);
             context.startActivity(intent);
             return true;
         }
@@ -85,16 +82,15 @@ public class TermActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView(CharSequence search) {
-        ArrayList<Term> allTerms = new ArrayList<>(db.appDao().getAllTerms());
-        ArrayList<Term> filteredTerms = (ArrayList<Term>) allTerms.clone();
-        filteredTerms.removeIf(
-                t -> !t.title.toLowerCase().contains(search.toString().toLowerCase())
+        ArrayList<Course> allCourses = new ArrayList<>(db.appDao().getAllCourses());
+        ArrayList<Course> filteredCourses = (ArrayList<Course>) allCourses.clone();
+        filteredCourses.removeIf(
+                c -> !c.title.toLowerCase().contains(search.toString().toLowerCase())
         );
-        GenericAdapter adapter = new GenericAdapter(this, filteredTerms);
+        GenericAdapter adapter = new GenericAdapter(this, filteredCourses);
         adapter.setDb(db);
-        RecyclerView recyclerView = findViewById(R.id.termRecyclerview);
+        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 }

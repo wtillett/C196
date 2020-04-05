@@ -1,14 +1,11 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
-import com.wtillett.c196project.database.AppDatabase;
+import com.wtillett.ClassTracker.database.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
 

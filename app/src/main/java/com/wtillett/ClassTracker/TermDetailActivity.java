@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -18,9 +18,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Course;
-import com.wtillett.c196project.database.Term;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Course;
+import com.wtillett.ClassTracker.database.Term;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

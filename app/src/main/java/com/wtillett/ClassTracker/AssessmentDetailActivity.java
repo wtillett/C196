@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -21,8 +21,8 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.ToggleButton;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Assessment;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Assessment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

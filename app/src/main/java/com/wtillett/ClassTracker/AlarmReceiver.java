@@ -1,4 +1,4 @@
-package com.wtillett.c196project;
+package com.wtillett.ClassTracker;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -7,9 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import com.wtillett.c196project.database.AppDatabase;
-import com.wtillett.c196project.database.Assessment;
-import com.wtillett.c196project.database.Course;
+import com.wtillett.ClassTracker.database.AppDatabase;
+import com.wtillett.ClassTracker.database.Assessment;
+import com.wtillett.ClassTracker.database.Course;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

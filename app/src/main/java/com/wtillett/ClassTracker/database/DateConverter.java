@@ -1,4 +1,4 @@
-package com.wtillett.c196project.database;
+package com.wtillett.ClassTracker.database;
 
 import android.arch.persistence.room.TypeConverter;
 

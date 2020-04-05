@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">C196 Project</string>
+    <string name="app_name">Class Tracker</string>
     <string name="term_button_text">View Terms</string>
     <string name="course_button_text">View Courses</string>
     <string name="assessment_button_text">View Assessments</string>
