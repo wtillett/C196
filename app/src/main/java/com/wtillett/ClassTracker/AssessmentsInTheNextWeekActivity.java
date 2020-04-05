@@ -43,7 +43,7 @@ public class AssessmentsInTheNextWeekActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private boolean isThisWeek(Assessment a) {
+    public static boolean isThisWeek(Assessment a) {
         LocalDate yesterday = LocalDate.now().minusDays(1);
         LocalDate oneWeekPlus = yesterday.plusDays(9);
         return a.goalDate.isBefore(oneWeekPlus) && a.goalDate.isAfter(yesterday);
