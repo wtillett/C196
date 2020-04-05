@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.wtillett.ClassTracker.database.AppDatabase;
 import com.wtillett.ClassTracker.database.Course;
@@ -24,19 +25,29 @@ public class CoursesPerTermActivity extends AppCompatActivity implements Adapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses_per_term);
 
+        TextView selectTerm = findViewById(R.id.selectTerm);
+        TextView noTermsFound = findViewById(R.id.noTermsFound);
+        Spinner spinner = findViewById(R.id.termSpinner);
+
         db = AppDatabase.getDatabase(getApplicationContext());
         ArrayList<Term> terms = new ArrayList<>(db.appDao().getAllTerms());
-        ArrayList<String> termTitles = new ArrayList<String>();
-        terms.forEach(t -> termTitles.add(t.title));
 
-        Spinner spinner = findViewById(R.id.termSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, termTitles);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        if (terms.size() == 0) {
+            selectTerm.setVisibility(View.INVISIBLE);
+            noTermsFound.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.INVISIBLE);
+        } else {
+            ArrayList<String> termTitles = new ArrayList<String>();
+            terms.forEach(t -> termTitles.add(t.title));
 
-        ArrayList<Course> filteredCourses = getFilteredCourses(termTitles.get(0));
-        setRecyclerView(filteredCourses);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_dropdown_item, termTitles);
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(this);
+
+            ArrayList<Course> filteredCourses = getFilteredCourses(termTitles.get(0));
+            setRecyclerView(filteredCourses);
+        }
     }
 
     private void setRecyclerView(ArrayList<Course> filteredCourses) {

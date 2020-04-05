@@ -44,4 +44,6 @@
     <string name="courses_per_term_report_header">Courses Per Term Report</string>
     <string name="select_a_term">Select a term</string>
     <string name="assessments_in_the_next_week_report_header">Assessments in the Next Week</string>
+    <string name="no_terms_found">No terms found</string>
+    <string name="no_assessments_found">No assessments found</string>
 </resources>

@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.wtillett.ClassTracker.database.AppDatabase;
 import com.wtillett.ClassTracker.database.Assessment;
@@ -20,11 +22,17 @@ public class AssessmentsInTheNextWeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessments_in_the_next_week);
 
+        TextView noAssessmentsFound = findViewById(R.id.noAssessmentsFound);
+
         db = AppDatabase.getDatabase(getApplicationContext());
         ArrayList<Assessment> assessments = new ArrayList<>(db.appDao().getAllAssessments());
-        assessments.removeIf(a -> !isThisWeek(a));
 
-        setRecyclerView(assessments);
+        if (assessments.size() == 0) {
+            noAssessmentsFound.setVisibility(View.VISIBLE);
+        } else {
+            assessments.removeIf(a -> !isThisWeek(a));
+            setRecyclerView(assessments);
+        }
     }
 
     private void setRecyclerView(ArrayList<Assessment> assessments) {
