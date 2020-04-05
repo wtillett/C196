@@ -27,5 +27,6 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void launchAssessmentsInTheNextWeekReport(View view) {
+        startActivity(new Intent(this, AssessmentsInTheNextWeekActivity.class));
     }
 }

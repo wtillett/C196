@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CoursesPerTermActivity"></activity>
+        <activity android:name=".AssessmentsInTheNextWeekActivity"></activity>
+        <activity android:name=".CoursesPerTermActivity" />
         <activity android:name=".ReportActivity" />
 
         <receiver
