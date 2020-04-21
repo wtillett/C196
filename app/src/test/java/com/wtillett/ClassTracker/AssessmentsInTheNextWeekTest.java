@@ -2,12 +2,9 @@ package com.wtillett.ClassTracker;
 
 import com.wtillett.ClassTracker.database.Assessment;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static com.wtillett.ClassTracker.AssessmentsInTheNextWeekActivity.isThisWeek;
 import static junit.framework.TestCase.assertFalse;
