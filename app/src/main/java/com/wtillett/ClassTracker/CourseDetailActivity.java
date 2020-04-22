@@ -343,8 +343,6 @@ public class CourseDetailActivity extends AppCompatActivity implements AdapterVi
                 alarmManager.cancel(notifyEndDatePendingIntent);
                 notificationManager.cancel(startNotificationID);
                 notificationManager.cancel(endNotificationID);
-                startDateNotifyIntent = null;
-                endDateNotifyIntent = null;
             }
         }
     }
